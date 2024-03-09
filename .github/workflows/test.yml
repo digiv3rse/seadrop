@@ -4,8 +4,6 @@ on:
   push:
     branches: [main]
     tags: ["*"]
-  pull_request:
-    types: [opened, reopened, synchronize]
 
 concurrency:
   group: ${{github.workflow}}-${{github.ref}}
@@ -87,7 +85,7 @@ jobs:
       - name: Submit coverage to Coveralls
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TOKEN }}
           flag-name: hardhat
           parallel: true
 
@@ -111,7 +109,7 @@ jobs:
         run: forge test -vvv
         env:
           ETHEREUM_RPC_URL: ${{ secrets.ETHEREUM_RPC_URL }}
-          GOERLI_RPC_URL: ${{ secrets.GOERLI_RPC_URL }}
+          GOERLI_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
 
   forge-coverage:
     name: Run Forge Coverage
@@ -133,12 +131,12 @@ jobs:
         run: yarn coverage:forge
         env:
           ETHEREUM_RPC_URL: ${{ secrets.ETHEREUM_RPC_URL }}
-          GOERLI_RPC_URL: ${{ secrets.GOERLI_RPC_URL }}
+          GOERLI_RPC_URL: ${{ secrets.SEPOLIA_RPC_URL }}
 
       - name: Submit coverage to Coveralls
         uses: coverallsapp/github-action@master
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.TOKEN }}
           path-to-lcov: ./lcov-filtered.info
           flag-name: foundry
           parallel: true
